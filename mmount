@@ -1,0 +1,43 @@
+#!/bin/bash
+
+if [ "$1" == "auto" ]; then
+  echo "Mounting Autolab's nas"
+  if !(mount | grep /mnt/autolab/daniel > /dev/null); then
+    sudo mount -t cifs //140.116.234.171/daniel /mnt/autolab/daniel -o credentials=/root/.smbcredentials,uid=daniel,gid=daniel
+    echo -e "/mnt/autolab/daniel mounted"
+  fi
+  if !(mount | grep /mnt/autolab/Documents > /dev/null); then
+    sudo mount -t cifs //140.116.234.171/Documents /mnt/autolab/Documents -o credentials=/root/.smbcredentials,uid=daniel,gid=daniel
+    echo -e "/mnt/autolab/Documents mounted"
+  fi
+elif [ "$1" == "my" ]; then
+  echo "Mounting my nas"
+  if !(mount | grep /mnt/synology/home > /dev/null); then
+    sudo mount -t cifs //danielchen.tk/home /mnt/synology/home -o credentials=/root/.smbcredentials,uid=daniel,gid=daniel
+    echo -e "/mnt/synology/home mounted"
+  fi
+  if !(mount | grep /mnt/synology/photo > /dev/null); then
+    sudo mount -t cifs //danielchen.tk/photo /mnt/synology/photo -o credentials=/root/.smbcredentials,uid=daniel,gid=daniel
+    echo -e "/mnt/synology/photo mounted"
+  fi
+  if !(mount | grep /mnt/synology/video > /dev/null); then
+    sudo mount -t cifs //danielchen.tk/video /mnt/synology/video -o credentials=/root/.smbcredentials,uid=daniel,gid=daniel
+    echo -e "/mnt/synology/video mounted"
+  fi
+elif [ "$1" == "u" ]; then
+  if [ "$2" == "auto" ]; then
+    echo "Unmounting Autolab's nas"
+    $(mount | grep /mnt/autolab/daniel > /dev/null) && sudo umount /mnt/autolab/daniel && echo "/mnt/autolab/daniel unmounted"
+    $(mount | grep /mnt/autolab/Documents > /dev/null) && sudo umount /mnt/autolab/Documents && echo "/mnt/autolab/Documents unmounted"
+  fi
+  if [ "$2" == "my" ]; then
+    echo "Unmounting my nas"
+    $(mount | grep /mnt/synology/home > /dev/null) && sudo umount /mnt/synology/home && echo "/mnt/synology/home unmounted"
+    $(mount | grep /mnt/synology/photo > /dev/null) && sudo umount /mnt/synology/photo && echo "/mnt/synology/photo unmounted"
+    $(mount | grep /mnt/synology/video > /dev/null) && sudo umount /mnt/synology/video && echo "/mnt/synology/video unmounted"
+  fi
+else
+  echo "Command not found"
+fi
+
+exit 0
